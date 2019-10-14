@@ -1,0 +1,55 @@
+Configuration:
+  status: warn
+  Appenders:
+    Console:
+      name: CONSOLE
+      target: SYSTEM_OUT
+      PatternLayout:
+        pattern: '%d{yyyy/MM/dd HH:mm:ss.SSS} %-5level - [%t] %c{1}:%L - %m%n'
+    RollingRandomAccessFile:
+      - name: INFO
+        fileName: log/contract-generation.log
+        filePattern: log/$${date:yyyy-MM}/%d{yyyy-MM-dd}-contract-generation-%i.log.gz
+        PatternLayout:
+          pattern: "%d{yyyy/MM/dd HH:mm:ss.SSS} %-5level - %c{1} - %m%n"
+        Policies:
+          TimeBasedTriggeringPolicy: {}
+          OnStartupTriggeringPolicy: {}
+          SizeBasedTriggeringPolicy:
+            size: 200 MB
+      - name: ERROR
+        fileName: log/contract-generation-error.log
+        filePattern: log/$${date:yyyy-MM}/%d{yyyy-MM-dd}-contract-generation-error-%i.log.gz
+        PatternLayout:
+          pattern: "%d{yyyy/MM/dd HH:mm:ss.SSS} %-5level - [%t] %c - %M:%L | %m%n"
+        Policies:
+          TimeBasedTriggeringPolicy: {}
+      - name: JSON
+        fileName: log/contract-generation.json
+        filePattern: log/$${date:yyyy-MM}/%d{yyyy-MM-dd}-contract-generation-%i.json.gz
+        JSONLayout:
+          stacktraceAsString: true
+          compact: true
+          eventEol: true
+        Policies:
+          TimeBasedTriggeringPolicy: {}
+          OnStartupTriggeringPolicy: {}
+          SizeBasedTriggeringPolicy:
+            size: 200 MB
+  Loggers:
+    Logger:
+      - name: EventLogger
+        level: info
+        additivity: false
+        AppenderRef:
+          - ref: ERROR
+          - ref: INFO
+          - ref: JSON
+    Root:
+      level: info
+      AppenderRef:
+        - ref: CONSOLE
+        - ref: ERROR
+          level: error
+        - ref: INFO
+        - ref: JSON

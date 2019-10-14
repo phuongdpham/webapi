@@ -1,0 +1,48 @@
+server.port: 8509
+
+spring:
+  data.mongodb.uri: mongodb://grant:Grant158@10.200.39.41:27017/contract_generation
+
+  main:
+    allow-bean-definition-overriding: true
+
+  application:
+    name: Contract-Generation-API
+    security: true
+
+logging:
+  config: config/log4j2.yml
+  level:
+    web: DEBUG
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+
+  endpoint:
+    health:
+      show-details: always
+    shutdown:
+      enabled: true
+
+  metrics:
+    export:
+      atlas:
+        enabled: false
+    sensitive: false
+
+  health:
+    telnet:
+      connectTimeout: 1000
+      services:
+        - name: finfo-db
+          host: localhost
+          port: 1521
+
+webclient:
+  connectionTimeout: 10000  # millisecond
+  readTimeout: 10  # second
+  writeTimeout: 10  # second
+
